@@ -1,8 +1,8 @@
 package com.example.student_management_system.controller;
 
-import com.example.student_management_system.dto.AuthResponse;
-import com.example.student_management_system.dto.LoginRequest;
-import com.example.student_management_system.dto.RegisterRequest;
+import com.example.student_management_system.auth.AuthResponse;
+import com.example.student_management_system.auth.LoginRequest;
+import com.example.student_management_system.auth.RegisterRequest;
 
 import com.example.student_management_system.service.AuthService;
 

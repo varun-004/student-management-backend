@@ -2,7 +2,7 @@ package com.example.student_management_system.student.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class Studentdto {
+public class StudentDTO {
 
     @NotBlank(message = "Name cannot be empty")
     private String name;

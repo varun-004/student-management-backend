@@ -1,18 +1,10 @@
 package com.example.student_management_system.teacher.controller;
 
-import com.example.student_management_system.attendance.dto.AttendanceResponse;
-import com.example.student_management_system.dto.*;
 import com.example.student_management_system.teacher.dto.*;
 import com.example.student_management_system.teacher.service.TeacherService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-
-import com.example.student_management_system.attendance.util.AttendanceCsvExporter;
 
 @RestController
 @RequestMapping("/api/teachers")

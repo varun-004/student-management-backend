@@ -7,7 +7,6 @@ import com.example.student_management_system.course.repository.CourseRepository;
 
 import com.example.student_management_system.marks.repository.MarksRepository;
 import com.example.student_management_system.student.dto.StudentResponse;
-import com.example.student_management_system.student.dto.Studentdto;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
 
@@ -19,7 +18,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.example.student_management_system.enrollment.entity.Enrollment;
 import com.example.student_management_system.enrollment.repository.EnrollmentRepository;

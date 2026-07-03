@@ -1,6 +1,6 @@
 package com.example.student_management_system.student.service;
 
-import com.example.student_management_system.student.dto.Studentdto;
+import com.example.student_management_system.student.dto.StudentDTO;
 import com.example.student_management_system.ResponseDTO.StudentResponseDTO;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
@@ -29,7 +29,7 @@ public class StudentService {
                 .toList();
     }
 
-    public StudentResponseDTO saveStudent(Studentdto dto) {
+    public StudentResponseDTO saveStudent(StudentDTO dto) {
 
         Student student = new Student();
         student.setName(dto.getName());
@@ -53,7 +53,7 @@ public class StudentService {
         return convertToDTO(student);
     }
 
-    public StudentResponseDTO updateStudent(Long id, Studentdto dto) {
+    public StudentResponseDTO updateStudent(Long id, StudentDTO dto) {
 
         Student existing = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));

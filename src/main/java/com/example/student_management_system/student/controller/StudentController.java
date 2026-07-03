@@ -1,8 +1,7 @@
 package com.example.student_management_system.student.controller;
 
 import com.example.student_management_system.ResponseDTO.StudentResponseDTO;
-import com.example.student_management_system.student.dto.StudentResponse;
-import com.example.student_management_system.student.dto.Studentdto;
+import com.example.student_management_system.student.dto.StudentDTO;
 import com.example.student_management_system.student.service.StudentService;
 
 import jakarta.validation.Valid;
@@ -26,7 +25,7 @@ public class StudentController {
     // CREATE STUDENT
     @PostMapping
     public StudentResponseDTO create(
-            @Valid @RequestBody Studentdto dto
+            @Valid @RequestBody StudentDTO dto
     ) {
         return service.saveStudent(dto);
     }
@@ -49,7 +48,7 @@ public class StudentController {
     @PutMapping("/{id}")
     public StudentResponseDTO update(
             @PathVariable Long id,
-            @Valid @RequestBody Studentdto dto
+            @Valid @RequestBody StudentDTO dto
     ) {
         return service.updateStudent(id, dto);
     }
