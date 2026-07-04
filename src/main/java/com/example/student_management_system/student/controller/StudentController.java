@@ -1,6 +1,6 @@
 package com.example.student_management_system.student.controller;
 
-import com.example.student_management_system.ResponseDTO.StudentResponseDTO;
+import com.example.student_management_system.student.dto.StudentResponse;
 import com.example.student_management_system.student.dto.StudentDTO;
 import com.example.student_management_system.student.service.StudentService;
 
@@ -24,7 +24,7 @@ public class StudentController {
 
     // CREATE STUDENT
     @PostMapping
-    public StudentResponseDTO create(
+    public StudentResponse create(
             @Valid @RequestBody StudentDTO dto
     ) {
         return service.saveStudent(dto);
@@ -32,13 +32,13 @@ public class StudentController {
 
     // GET ALL STUDENTS
     @GetMapping
-    public List<StudentResponseDTO> getAll() {
+    public List<StudentResponse> getAll() {
         return service.getAllStudents();
     }
 
     // GET STUDENT BY ID
     @GetMapping("/{id}")
-    public StudentResponseDTO getById(
+    public StudentResponse getById(
             @PathVariable Long id
     ) {
         return service.getStudentById(id);
@@ -46,7 +46,7 @@ public class StudentController {
 
     // UPDATE STUDENT
     @PutMapping("/{id}")
-    public StudentResponseDTO update(
+    public StudentResponse update(
             @PathVariable Long id,
             @Valid @RequestBody StudentDTO dto
     ) {
@@ -64,7 +64,7 @@ public class StudentController {
 
     // PAGINATION
     @GetMapping("/page")
-    public Page<StudentResponseDTO> getStudents(
+    public Page<StudentResponse> getStudents(
             Pageable pageable
     ) {
         return service.getStudents(pageable);
@@ -72,7 +72,7 @@ public class StudentController {
 
     // SEARCH STUDENTS
     @GetMapping("/search")
-    public Page<StudentResponseDTO> search(
+    public Page<StudentResponse> search(
             @RequestParam String name,
             Pageable pageable
     ) {
@@ -87,7 +87,7 @@ public class StudentController {
     }
 
     @GetMapping("/email/{email}")
-    public StudentResponseDTO
+    public StudentResponse
     getStudentByEmail(
             @PathVariable String email
     ) {

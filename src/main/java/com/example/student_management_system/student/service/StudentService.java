@@ -1,7 +1,7 @@
 package com.example.student_management_system.student.service;
 
 import com.example.student_management_system.student.dto.StudentDTO;
-import com.example.student_management_system.ResponseDTO.StudentResponseDTO;
+import com.example.student_management_system.student.dto.StudentResponse;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ public class StudentService {
         this.repo = repo;
     }
 
-    public List<StudentResponseDTO> getAllStudents() {
+    public List<StudentResponse> getAllStudents() {
         return repo.findAll()
                 .stream()
                 .map(this::convertToDTO)
                 .toList();
     }
 
-    public StudentResponseDTO saveStudent(StudentDTO dto) {
+    public StudentResponse saveStudent(StudentDTO dto) {
 
         Student student = new Student();
         student.setName(dto.getName());
@@ -45,7 +45,7 @@ public class StudentService {
         repo.delete(existing);
     }
 
-    public StudentResponseDTO getStudentById(Long id) {
+    public StudentResponse getStudentById(Long id) {
 
         Student student = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
@@ -53,7 +53,7 @@ public class StudentService {
         return convertToDTO(student);
     }
 
-    public StudentResponseDTO updateStudent(Long id, StudentDTO dto) {
+    public StudentResponse updateStudent(Long id, StudentDTO dto) {
 
         Student existing = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
@@ -66,35 +66,35 @@ public class StudentService {
     }
 
 
-    public StudentResponseDTO convertToDTO(Student student) {
-        StudentResponseDTO dto = new StudentResponseDTO();
-        dto.setId(student.getId());
-        dto.setName(student.getName());
-        dto.setEmail(student.getEmail());
-        return dto;
+    public StudentResponse convertToDTO(Student student) {
+        return StudentResponse.builder()
+                .id(student.getId())
+                .name(student.getName())
+                .email(student.getEmail())
+                .build();
     }
 
-    public Page<StudentResponseDTO> getStudents(Pageable pageable) {
+    public Page<StudentResponse> getStudents(Pageable pageable) {
 
         return repo.findAll(pageable)
                 .map(this::convertToDTO);
     }
 
-    public List<StudentResponseDTO> searchByName(String name) {
+    public List<StudentResponse> searchByName(String name) {
         return repo.findByNameContainingIgnoreCase(name)
                 .stream()
                 .map(this::convertToDTO)
                 .toList();
     }
 
-    public Page<StudentResponseDTO> searchStudents(String name, Pageable pageable) {
+    public Page<StudentResponse> searchStudents(String name, Pageable pageable) {
 
         return repo.findByNameContainingIgnoreCase(name, pageable)
                 .map(this::convertToDTO);
     }
 
 
-    public StudentResponseDTO getStudentByEmail(
+    public StudentResponse getStudentByEmail(
             String email
     ) {
 
