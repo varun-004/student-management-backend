@@ -1,27 +1,27 @@
 package com.example.student_management_system.course.service;
+
 import com.example.student_management_system.attendance.repository.AttendanceRepository;
-import com.example.student_management_system.course.dto.CreateCourseRequest;
 import com.example.student_management_system.course.dto.CourseResponse;
+import com.example.student_management_system.course.dto.CreateCourseRequest;
 import com.example.student_management_system.course.entity.Course;
 import com.example.student_management_system.course.repository.CourseRepository;
-
+import com.example.student_management_system.enrollment.entity.Enrollment;
+import com.example.student_management_system.enrollment.repository.EnrollmentRepository;
 import com.example.student_management_system.marks.repository.MarksRepository;
 import com.example.student_management_system.student.dto.StudentResponse;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
-
 import com.example.student_management_system.teacher.entity.Teacher;
 import com.example.student_management_system.teacher.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import com.example.student_management_system.enrollment.entity.Enrollment;
-import com.example.student_management_system.enrollment.repository.EnrollmentRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

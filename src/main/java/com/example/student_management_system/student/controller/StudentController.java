@@ -1,11 +1,9 @@
 package com.example.student_management_system.student.controller;
 
-import com.example.student_management_system.student.dto.StudentResponse;
 import com.example.student_management_system.student.dto.StudentDTO;
+import com.example.student_management_system.student.dto.StudentResponse;
 import com.example.student_management_system.student.service.StudentService;
-
 import jakarta.validation.Valid;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;

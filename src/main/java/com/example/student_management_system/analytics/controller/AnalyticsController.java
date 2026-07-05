@@ -1,17 +1,16 @@
         package com.example.student_management_system.analytics.controller;
 
-import com.example.student_management_system.analytics.dto.DashboardResponseDTO;
-import com.example.student_management_system.analytics.dto.StudentRiskDTO;
+        import com.example.student_management_system.analytics.dto.DashboardResponseDTO;
+        import com.example.student_management_system.analytics.dto.StudentRiskDTO;
+        import com.example.student_management_system.analytics.service.AnalyticsService;
+        import lombok.RequiredArgsConstructor;
+        import org.springframework.web.bind.annotation.GetMapping;
+        import org.springframework.web.bind.annotation.RequestMapping;
+        import org.springframework.web.bind.annotation.RestController;
 
-import com.example.student_management_system.analytics.service.AnalyticsService;
+        import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-@RestController
+        @RestController
 @RequestMapping("/api/analytics")
 @RequiredArgsConstructor
 public class AnalyticsController {

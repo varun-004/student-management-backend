@@ -1,25 +1,20 @@
         package com.example.student_management_system.attendance.controller;
 
-import com.example.student_management_system.attendance.dto.AttendanceResponse;
-import com.example.student_management_system.attendance.dto.CourseAttendanceResponse;
-import com.example.student_management_system.attendance.dto.MarkAttendanceRequest;
+        import com.example.student_management_system.attendance.dto.AttendanceResponse;
+        import com.example.student_management_system.attendance.dto.CourseAttendanceResponse;
+        import com.example.student_management_system.attendance.dto.MarkAttendanceRequest;
+        import com.example.student_management_system.attendance.service.AttendanceService;
+        import com.example.student_management_system.attendance.util.AttendanceCsvExporter;
+        import com.example.student_management_system.teacher.service.TeacherService;
+        import org.springframework.http.HttpHeaders;
+        import org.springframework.http.MediaType;
+        import org.springframework.http.ResponseEntity;
+        import org.springframework.web.bind.annotation.*;
 
-import com.example.student_management_system.attendance.entity.Attendance;
-import com.example.student_management_system.attendance.service.AttendanceService;
+        import java.time.LocalDate;
+        import java.util.List;
 
-import com.example.student_management_system.attendance.util.AttendanceCsvExporter;
-import com.example.student_management_system.teacher.service.TeacherService;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
-
-@RestController
+        @RestController
 
 @RequestMapping("/api/attendance")
 

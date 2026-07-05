@@ -51,6 +51,7 @@ public class Attendance {
     | DATE
     |--------------------------------------------------------------------------
     */
+    @Column(nullable = false)
 
     private LocalDate attendanceDate;
 
@@ -61,6 +62,8 @@ public class Attendance {
     */
 
     private Boolean present;
+
+
 
 
 }

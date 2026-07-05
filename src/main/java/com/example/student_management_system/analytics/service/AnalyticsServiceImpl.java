@@ -1,20 +1,15 @@
 package com.example.student_management_system.analytics.service;
+
 import com.example.student_management_system.analytics.dto.CourseStatsDTO;
 import com.example.student_management_system.analytics.dto.DashboardResponseDTO;
 import com.example.student_management_system.analytics.dto.StudentRiskDTO;
 import com.example.student_management_system.analytics.util.RiskAnalysisUtil;
-
+import com.example.student_management_system.attendance.repository.AttendanceRepository;
+import com.example.student_management_system.enrollment.repository.EnrollmentRepository;
+import com.example.student_management_system.marks.repository.MarksRepository;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
-
-import com.example.student_management_system.attendance.repository.AttendanceRepository;
-
-import com.example.student_management_system.marks.repository.MarksRepository;
-
-import com.example.student_management_system.enrollment.repository.EnrollmentRepository;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 

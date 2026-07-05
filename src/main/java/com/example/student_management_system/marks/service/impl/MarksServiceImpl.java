@@ -2,24 +2,19 @@ package com.example.student_management_system.marks.service.impl;
 
 import com.example.student_management_system.course.entity.Course;
 import com.example.student_management_system.course.repository.CourseRepository;
-
 import com.example.student_management_system.marks.dto.AddMarksRequest;
 import com.example.student_management_system.marks.dto.MarksResponse;
+import com.example.student_management_system.marks.dto.TopPerformerResponse;
 import com.example.student_management_system.marks.dto.UpdateMarksRequest;
 import com.example.student_management_system.marks.entity.Marks;
 import com.example.student_management_system.marks.repository.MarksRepository;
 import com.example.student_management_system.marks.service.MarksService;
-
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import com.example.student_management_system.marks.dto.TopPerformerResponse;
 
 @Service
 @RequiredArgsConstructor

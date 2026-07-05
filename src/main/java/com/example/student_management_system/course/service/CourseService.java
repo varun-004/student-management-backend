@@ -1,7 +1,7 @@
 package com.example.student_management_system.course.service;
 
-import com.example.student_management_system.course.dto.CreateCourseRequest;
 import com.example.student_management_system.course.dto.CourseResponse;
+import com.example.student_management_system.course.dto.CreateCourseRequest;
 import com.example.student_management_system.student.dto.StudentResponse;
 import org.springframework.data.domain.Page;
 

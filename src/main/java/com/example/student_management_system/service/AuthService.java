@@ -3,29 +3,18 @@ package com.example.student_management_system.service;
 import com.example.student_management_system.auth.AuthResponse;
 import com.example.student_management_system.auth.LoginRequest;
 import com.example.student_management_system.auth.RegisterRequest;
-
 import com.example.student_management_system.entity.User;
-
 import com.example.student_management_system.repository.UserRepository;
-
 import com.example.student_management_system.security.CustomUserDetailsService;
-
 import com.example.student_management_system.security.JwtService;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.authentication.AuthenticationManager;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-import org.springframework.security.core.userdetails.UserDetails;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import org.springframework.stereotype.Service;
-
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 
 @Service

@@ -1,14 +1,11 @@
 package com.example.student_management_system.course.controller;
 
-import com.example.student_management_system.course.dto.CreateCourseRequest;
 import com.example.student_management_system.course.dto.CourseResponse;
+import com.example.student_management_system.course.dto.CreateCourseRequest;
 import com.example.student_management_system.course.service.CourseService;
-
 import com.example.student_management_system.student.dto.StudentResponse;
 import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

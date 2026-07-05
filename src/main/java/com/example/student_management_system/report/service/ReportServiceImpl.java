@@ -5,12 +5,9 @@ import com.example.student_management_system.marks.dto.MarksResponse;
 import com.example.student_management_system.marks.entity.Marks;
 import com.example.student_management_system.marks.repository.MarksRepository;
 import com.example.student_management_system.report.dto.StudentReportResponse;
-import com.example.student_management_system.report.service.ReportService;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;

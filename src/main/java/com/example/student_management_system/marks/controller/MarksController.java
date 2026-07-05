@@ -5,11 +5,7 @@ import com.example.student_management_system.marks.dto.MarksResponse;
 import com.example.student_management_system.marks.dto.TopPerformerResponse;
 import com.example.student_management_system.marks.dto.UpdateMarksRequest;
 import com.example.student_management_system.marks.service.MarksService;
-
-import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

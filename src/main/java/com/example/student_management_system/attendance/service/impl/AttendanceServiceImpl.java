@@ -45,65 +45,37 @@ public class AttendanceServiceImpl
             MarkAttendanceRequest request
     ) {
 
-        Student student =
-                studentRepository.findById(
-                                request.getStudentId()
-                        )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Student not found"
-                                )
-                        );
+        Student student = studentRepository.findById(
+                request.getStudentId()
+        ).orElseThrow(() ->
+                new RuntimeException("Student not found")
+        );
 
-        Course course =
-                courseRepository.findById(
-                                request.getCourseId()
-                        )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Course not found"
-                                )
-                        );
+        Course course = courseRepository.findById(
+                request.getCourseId()
+        ).orElseThrow(() ->
+                new RuntimeException("Course not found")
+        );
 
-        attendanceRepository
+        Attendance attendance = attendanceRepository
                 .findByStudent_IdAndCourse_IdAndAttendanceDate(
                         request.getStudentId(),
                         request.getCourseId(),
-                        LocalDate.now()
-
+                        request.getAttendanceDate()
                 )
-                .ifPresent(attendance -> {
+                .orElse(
+                        Attendance.builder()
+                                .student(student)
+                                .course(course)
+                                .attendanceDate(request.getAttendanceDate())
+                                .build()
+                );
 
-                    throw new RuntimeException(
-                            "Attendance already marked for today"
-                    );
+        attendance.setPresent(request.getPresent());
 
-                });
+        attendanceRepository.save(attendance);
 
-        Attendance attendance =
-                Attendance.builder()
-
-                        .student(student)
-
-                        .course(course)
-
-                        .attendanceDate(
-                                LocalDate.now()
-                        )
-
-                        .present(
-                                request.getPresent()
-                        )
-
-                        .build();
-
-        attendanceRepository.save(
-                attendance
-        );
-
-        return mapToResponse(
-                attendance
-        );
+        return mapToResponse(attendance);
     }
 
     /*
@@ -200,7 +172,7 @@ public class AttendanceServiceImpl
                 )
 
                 .attendanceDate(
-                        LocalDate.now()
+                        attendance.getAttendanceDate()
                 )
 
                 .present(

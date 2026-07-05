@@ -4,9 +4,9 @@ import com.example.student_management_system.student.dto.StudentDTO;
 import com.example.student_management_system.student.dto.StudentResponse;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

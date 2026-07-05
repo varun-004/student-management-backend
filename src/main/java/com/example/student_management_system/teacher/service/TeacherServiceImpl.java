@@ -1,23 +1,19 @@
 package com.example.student_management_system.teacher.service;
 
-import com.example.student_management_system.teacher.dto.*;
-import com.example.student_management_system.entity.Role;
-import com.example.student_management_system.teacher.entity.Teacher;
-import com.example.student_management_system.entity.User;
-import com.example.student_management_system.teacher.repository.TeacherRepository;
-import com.example.student_management_system.repository.UserRepository;
-import com.example.student_management_system.teacher.service.TeacherService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.example.student_management_system.attendance.entity.Attendance;
 import com.example.student_management_system.attendance.repository.AttendanceRepository;
-
 import com.example.student_management_system.course.entity.Course;
 import com.example.student_management_system.course.repository.CourseRepository;
-
+import com.example.student_management_system.entity.Role;
+import com.example.student_management_system.entity.User;
 import com.example.student_management_system.marks.entity.Marks;
 import com.example.student_management_system.marks.repository.MarksRepository;
+import com.example.student_management_system.repository.UserRepository;
+import com.example.student_management_system.teacher.dto.*;
+import com.example.student_management_system.teacher.entity.Teacher;
+import com.example.student_management_system.teacher.repository.TeacherRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
