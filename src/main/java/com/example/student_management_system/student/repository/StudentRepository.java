@@ -32,4 +32,5 @@ import java.util.Optional;
     );
 
             Optional<Student> findByEmail(String email);
+            boolean existsByEmail(String email);
 }
