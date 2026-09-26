@@ -16,8 +16,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY =
-            "bXlzZWNyZXRrZXlteXNlY3JldGtleW15c2VjcmV0a2V5MTIzNDU2";
+    @org.springframework.beans.factory.annotation.Value("${jwt.secret}")
+    private String SECRET_KEY;
 
     // EXTRACT EMAIL
     public String extractUsername(String token) {

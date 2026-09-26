@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import com.example.student_management_system.enrollment.entity.Enrollment;
 
 @Entity
 @Table(name = "courses")
@@ -46,11 +48,15 @@ public class Course {
     |--------------------------------------------------------------------------
     */
 
-    @ManyToMany(mappedBy = "courses")
-
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<Student> students =
-            new HashSet<>();
+    private Set<Enrollment> enrollments = new HashSet<>();
+
+    public Set<Student> getStudents() {
+        return enrollments.stream()
+                .map(Enrollment::getStudent)
+                .collect(Collectors.toSet());
+    }
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")

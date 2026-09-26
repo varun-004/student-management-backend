@@ -262,13 +262,9 @@ public class CourseServiceImpl implements CourseService {
 
     /*
     |--------------------------------------------------------------------------
-    | ADD TO MANY-TO-MANY RELATIONSHIP
+    | SAVE ENROLLMENT RECORD
     |--------------------------------------------------------------------------
     */
-
-        student.getCourses().add(course);
-
-        studentRepository.save(student);
 
     /*
     |--------------------------------------------------------------------------
@@ -329,10 +325,8 @@ public class CourseServiceImpl implements CourseService {
                 courseId
         );
 
-        // Remove enrollment
-        student.getCourses().remove(course);
-
-        studentRepository.save(student);
+        // Remove enrollment via repository
+        enrollmentRepository.deleteByStudentIdAndCourseId(studentId, courseId);
 
         return mapToResponse(course);
     }

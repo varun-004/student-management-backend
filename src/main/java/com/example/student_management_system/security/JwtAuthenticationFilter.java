@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,6 +19,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Autowired
     private JwtService jwtService;
@@ -30,15 +34,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        System.out.println("JWT FILTER EXECUTED");
+        logger.debug("JWT FILTER EXECUTED");
 
         String path = request.getServletPath();
 
-        System.out.println("PATH: " + path);
+        logger.debug("PATH: {}", path);
 
         if (path.startsWith("/auth")) {
 
-            System.out.println("AUTH API - SKIPPING JWT FILTER");
+            logger.debug("AUTH API - SKIPPING JWT FILTER");
 
             filterChain.doFilter(request, response);
 
@@ -55,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader == null ||
                 !authHeader.startsWith("Bearer ")) {
 
-            System.out.println("NO TOKEN FOUND");
+            logger.debug("NO TOKEN FOUND");
 
             filterChain.doFilter(request, response);
 
@@ -66,12 +70,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // EXTRACT TOKEN
         jwt = authHeader.substring(7);
 
-        System.out.println("TOKEN: " + jwt);
+        logger.debug("TOKEN: {}", jwt);
 
         // EXTRACT EMAIL
         userEmail = jwtService.extractUsername(jwt);
 
-        System.out.println("EMAIL: " + userEmail);
+        logger.debug("EMAIL: {}", userEmail);
 
         // CHECK AUTH
         if (userEmail != null &&
@@ -82,11 +86,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     userDetailsService
                             .loadUserByUsername(userEmail);
 
-            System.out.println("USER LOADED");
+            logger.debug("USER LOADED");
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
 
-                System.out.println("TOKEN VALID");
+                logger.debug("TOKEN VALID");
 
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
@@ -103,7 +107,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext()
                         .setAuthentication(authToken);
 
-                System.out.println("AUTHENTICATION SET");
+                logger.debug("AUTHENTICATION SET");
             }
         }
 

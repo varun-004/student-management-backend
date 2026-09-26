@@ -8,6 +8,8 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import com.example.student_management_system.enrollment.entity.Enrollment;
 
 @Entity
 
@@ -36,22 +38,14 @@ public class Student {
     |--------------------------------------------------------------------------
     */
 
-    @ManyToMany
-
-    @JoinTable(
-            name = "student_courses",
-
-            joinColumns = @JoinColumn(
-                    name = "student_id"
-            ),
-
-            inverseJoinColumns = @JoinColumn(
-                    name = "course_id"
-            )
-    )
-
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private Set<Course> courses =
-            new HashSet<>();
+    private Set<Enrollment> enrollments = new HashSet<>();
+
+    public Set<Course> getCourses() {
+        return enrollments.stream()
+                .map(Enrollment::getCourse)
+                .collect(Collectors.toSet());
+    }
 
 }

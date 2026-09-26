@@ -22,4 +22,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "profile_image")
+    private String profileImage;
 }

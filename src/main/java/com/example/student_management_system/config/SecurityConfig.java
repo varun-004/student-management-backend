@@ -36,6 +36,7 @@ public class SecurityConfig {
 
                 .csrf(csrf -> csrf.disable())
 
+
                 .authorizeHttpRequests(auth -> auth
 
                         /*
@@ -43,6 +44,9 @@ public class SecurityConfig {
                         | PUBLIC AUTH APIs
                         |--------------------------------------------------------------------------
                         */
+                        .requestMatchers("/uploads/**")
+                        .permitAll()
+
 
                         .requestMatchers("/auth/**")
                         .permitAll()
@@ -68,7 +72,7 @@ public class SecurityConfig {
                         */
 
                         .requestMatchers("/api/courses/**")
-                        .permitAll()
+                        .authenticated()
 
                         /*
                         |--------------------------------------------------------------------------
