@@ -64,6 +64,16 @@ public class MarksController {
                 .addMarks(request);
     }
 
+    @PostMapping("/bulk")
+    public List<MarksResponse> addMarksBulk(
+            @RequestBody
+            List<AddMarksRequest> requests
+    ) {
+
+        return marksService
+                .addMarksBulk(requests);
+    }
+
     @GetMapping("/course/{courseId}")
     public List<MarksResponse>
     getMarksByCourse(

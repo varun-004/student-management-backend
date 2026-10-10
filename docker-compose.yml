@@ -7,27 +7,44 @@ services:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: student_management_db
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - student-mysql-data:/var/lib/mysql
     networks:
       - student-network
+  ai-ml-service:
+    build:
+      context: ../ai-ml-service
+      dockerfile: Dockerfile
+    image: student-management-ai-ml:latest
+    container_name: student-ai-ml
+    ports:
+      - "8000:8000"
+    networks:
+      - student-network
 
   backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: student-management-backend:latest
     container_name: student-backend
     depends_on:
       - mysql
+      - ai-ml-service
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/student_management_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
+      AI_ML_SERVICE_URL: http://ai-ml-service:8000
     ports:
       - "8080:8080"
     networks:
       - student-network
-
   frontend:
+    build:
+      context: ../student-management-frontend
+      dockerfile: Dockerfile
     image: student-management-frontend:latest
     container_name: student-frontend
     depends_on:
@@ -36,7 +53,6 @@ services:
       - "5173:80"
     networks:
       - student-network
-
 volumes:
   student-mysql-data:
 

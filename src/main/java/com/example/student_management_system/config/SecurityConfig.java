@@ -65,18 +65,214 @@ public class SecurityConfig {
 
                         /*
                         |--------------------------------------------------------------------------
-                        | COURSE APIs
+                        | STUDENT APIs (/students/**)
+                        | GET all/by-id/search/page: ADMIN only
+                        | POST (create), PUT (update), DELETE: ADMIN only
+                        | GET /students/email/{email}: STUDENT & ADMIN (own profile lookup)
+                        | GET /students/dashboard: STUDENT & ADMIN
                         |--------------------------------------------------------------------------
-                        | TEMPORARILY OPEN FOR DEBUGGING
+                        | NOTE: actual controller base path is /students (not /student)
                         |--------------------------------------------------------------------------
                         */
 
-                        .requestMatchers("/api/courses/**")
-                        .authenticated()
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/students/email/**",
+                                "/students/dashboard"
+                        ).hasAnyRole("STUDENT", "ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/students",
+                                "/students/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/students"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/students/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/students/**"
+                        ).hasRole("ADMIN")
 
                         /*
                         |--------------------------------------------------------------------------
-                        | ADMIN APIs
+                        | TEACHER APIs (/api/teachers/**)
+                        | GET all/by-id: ADMIN, TEACHER
+                        | POST (create), PUT (update), DELETE: ADMIN only
+                        | Dashboard & email lookup: ADMIN & TEACHER
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/teachers"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/teachers/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/api/teachers/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/teachers/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | COURSE APIs (/api/courses/**)
+                        | GET: authenticated users (ADMIN, TEACHER, STUDENT)
+                        | POST/PUT/DELETE: ADMIN only
+                        | Assign teacher/student: ADMIN only
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/courses/**"
+                        ).authenticated()
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/courses"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/courses/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/api/courses/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/courses/**"
+                        ).hasRole("ADMIN")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | MARKS APIs (/api/marks/**)
+                        | GET student marks/average/gpa: STUDENT, ADMIN, TEACHER
+                        | POST (add), PUT (update), DELETE: ADMIN, TEACHER
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/marks/**"
+                        ).hasAnyRole("STUDENT", "ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/marks",
+                                "/api/marks/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/marks/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/api/marks/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | ATTENDANCE APIs (/api/attendance/**)
+                        | POST (mark attendance): ADMIN, TEACHER
+                        | GET student/{studentId}: STUDENT, ADMIN, TEACHER
+                        | GET course/{courseId}: ADMIN, TEACHER
+                        | GET teacher/{teacherId}: ADMIN, TEACHER
+                        | GET percentage: STUDENT, ADMIN, TEACHER
+                        | GET course-wise: STUDENT, ADMIN, TEACHER
+                        | CSV exports: STUDENT (own), ADMIN, TEACHER
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/attendance",
+                                "/api/attendance/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/attendance/**"
+                        ).hasAnyRole("STUDENT", "ADMIN", "TEACHER")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | ANALYTICS APIs (/api/analytics/**)
+                        | Dashboard: ADMIN only
+                        | Student risk: ADMIN, TEACHER
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers(
+                                "/api/analytics/dashboard"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                "/api/analytics/students-risk"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(
+                                "/api/analytics/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | AI APIs (/api/ai/**)
+                        | STUDENT can access their own AI intelligence
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers("/api/ai/**")
+                        .hasAnyRole("ADMIN", "STUDENT", "TEACHER")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | REPORT APIs (/api/report/**)
+                        | Student report by studentId: STUDENT (own), ADMIN, TEACHER
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers(
+                                "/api/report/**"
+                        ).hasAnyRole("STUDENT", "ADMIN", "TEACHER")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | DASHBOARD STATS (/api/dashboard/**)
+                        | Admin only
+                        |--------------------------------------------------------------------------
+                        */
+
+                        .requestMatchers(
+                                "/api/dashboard/**"
+                        ).hasAnyRole("ADMIN", "TEACHER")
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | ADMIN CONTROLLER (/admin/**)
                         |--------------------------------------------------------------------------
                         */
 
@@ -85,28 +281,7 @@ public class SecurityConfig {
 
                         /*
                         |--------------------------------------------------------------------------
-                        | STUDENT APIs
-                        |--------------------------------------------------------------------------
-                        */
-
-                        .requestMatchers("/student/**")
-                        .hasAnyRole("STUDENT", "ADMIN")
-
-                        /*
-                        |--------------------------------------------------------------------------
-                        | ANALYTICS APIs
-                        |--------------------------------------------------------------------------
-                        */
-
-                        .requestMatchers("/api/analytics/**", "/api/ai/**")
-                        .hasAnyRole(
-                                "ADMIN",
-                                "STUDENT",
-                                "TEACHER"
-                        )
-                        /*
-                        |--------------------------------------------------------------------------
-                        | ALL OTHER APIs
+                        | ALL OTHER APIs - require authentication
                         |--------------------------------------------------------------------------
                         */
 
@@ -163,4 +338,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

@@ -49,6 +49,16 @@ public class AttendanceController {
                 .markAttendance(request);
     }
 
+    @PostMapping("/bulk")
+    public List<AttendanceResponse> markAttendanceBulk(
+            @RequestBody
+            List<MarkAttendanceRequest> requests
+    ) {
+
+        return attendanceService
+                .markAttendanceBulk(requests);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | COURSE ATTENDANCE
@@ -165,7 +175,32 @@ public class AttendanceController {
                 .body(csv);
     }
 
+    @GetMapping("/student/{studentId}/export")
+    public ResponseEntity<String> exportStudentAttendanceCsv(
+            @PathVariable Long studentId
+    ) {
 
+        List<AttendanceResponse> attendance =
+                attendanceService.getAttendanceByStudent(
+                        studentId
+                );
 
+        String csv =
+                AttendanceCsvExporter.export(
+                        attendance
+                );
 
+        return ResponseEntity.ok()
+
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=attendance-report.csv"
+                )
+
+                .contentType(
+                        MediaType.TEXT_PLAIN
+                )
+
+                .body(csv);
+    }
 }

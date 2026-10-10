@@ -1,4 +1,4 @@
-# Student Management System
+# Campus 360 — Backend API Service
 
 ## 🚀 Tech Stack
 - Java

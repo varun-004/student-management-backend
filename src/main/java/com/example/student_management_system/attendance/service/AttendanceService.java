@@ -13,6 +13,9 @@
     public AttendanceResponse markAttendance(
             MarkAttendanceRequest request);
 
+    List<AttendanceResponse> markAttendanceBulk(
+            List<MarkAttendanceRequest> requests);
+
     List<AttendanceResponse>
     getAttendanceByCourse(
             Long courseId

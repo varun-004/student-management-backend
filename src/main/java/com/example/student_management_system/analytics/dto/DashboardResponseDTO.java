@@ -13,6 +13,12 @@ public class DashboardResponseDTO {
 
     private long totalStudents;
 
+    // Added for admin dashboard display
+    private long totalTeachers;
+
+    // Added for admin dashboard display
+    private long totalCourses;
+
     private double averageAttendance;
 
     private double averageMarks;

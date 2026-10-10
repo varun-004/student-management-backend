@@ -78,6 +78,20 @@ public class AttendanceServiceImpl
         return mapToResponse(attendance);
     }
 
+    @org.springframework.transaction.annotation.Transactional
+    @Override
+    public List<AttendanceResponse> markAttendanceBulk(
+            List<MarkAttendanceRequest> requests
+    ) {
+        if (requests == null || requests.isEmpty()) {
+            return List.of();
+        }
+
+        return requests.stream()
+                .map(this::markAttendance)
+                .toList();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | GET COURSE ATTENDANCE
@@ -90,19 +104,9 @@ public class AttendanceServiceImpl
             Long courseId
     ) {
 
-        return attendanceRepository.findAll()
-
+        return attendanceRepository.findByCourseId(courseId)
                 .stream()
-
-                .filter(attendance ->
-
-                        attendance.getCourse()
-                                .getId()
-                                .equals(courseId)
-                )
-
                 .map(this::mapToResponse)
-
                 .toList();
     }
 
@@ -118,19 +122,9 @@ public class AttendanceServiceImpl
             Long studentId
     ) {
 
-        return attendanceRepository.findAll()
-
+        return attendanceRepository.findByStudentId(studentId)
                 .stream()
-
-                .filter(attendance ->
-
-                        attendance.getStudent()
-                                .getId()
-                                .equals(studentId)
-                )
-
                 .map(this::mapToResponse)
-
                 .toList();
     }
 
@@ -232,71 +226,32 @@ public class AttendanceServiceImpl
             Long studentId
     ) {
 
-        Student student =
-                studentRepository
-                        .findById(studentId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Student not found"
-                                )
-                        );
+        // Single DB query: groups by course, aggregates total and present counts
+        List<Object[]> rows =
+                attendanceRepository
+                        .findCourseWiseAttendanceSummaryByStudent(studentId);
 
-        return student.getCourses()
-
-                .stream()
-
-                .map(course -> {
-
-                    List<Attendance> attendanceList =
-                            attendanceRepository
-                                    .findAll()
-                                    .stream()
-                                    .filter(a ->
-
-                                            a.getStudent()
-                                                    .getId()
-                                                    .equals(studentId)
-
-                                                    &&
-
-                                                    a.getCourse()
-                                                            .getId()
-                                                            .equals(
-                                                                    course.getId()
-                                                            )
-                                    )
-                                    .toList();
-
-                    long total =
-                            attendanceList.size();
-
-                    long present =
-                            attendanceList.stream()
-                                    .filter(
-                                            Attendance::getPresent
-                                    )
-                                    .count();
-
-                    double percentage =
-                            total == 0
-                                    ? 0
-                                    : (present * 100.0)
-                                      / total;
+        return rows.stream()
+                .map(row -> {
+                    Long courseId   = (Long)   row[0];
+                    String courseName = (String) row[1];
+                    long total      = ((Number) row[2]).longValue();
+                    long present    = ((Number) row[3]).longValue();
+                    long absent     = total - present;
+                    double percentage = total == 0
+                            ? 0
+                            : (present * 100.0) / total;
 
                     return CourseAttendanceResponse
                             .builder()
-                            .courseId(
-                                    course.getId()
-                            )
-                            .courseName(
-                                    course.getCourseName()
-                            )
-                            .percentage(
-                                    percentage
-                            )
+                            .courseId(courseId)
+                            .courseName(courseName)
+                            .totalClasses(total)
+                            .present(present)
+                            .absent(absent)
+                            .percentage(percentage)
                             .build();
                 })
-
                 .toList();
     }
 

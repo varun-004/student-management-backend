@@ -9,12 +9,16 @@ import com.example.student_management_system.security.CustomUserDetailsService;
 import com.example.student_management_system.security.JwtService;
 import com.example.student_management_system.student.entity.Student;
 import com.example.student_management_system.student.repository.StudentRepository;
+import com.example.student_management_system.teacher.entity.Teacher;
+import com.example.student_management_system.teacher.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
@@ -33,8 +37,19 @@ public class AuthService {
 
     private final StudentRepository studentRepository;
 
+    private final TeacherRepository teacherRepository;
+
     // REGISTER
     public String register(RegisterRequest request) {
+
+        // FIX: Prevent public self-registration as ADMIN
+        if (request.getRole() != null &&
+                request.getRole().name().equals("ADMIN")) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Admin accounts cannot be created through public registration."
+            );
+        }
 
         User user = new User();
 
@@ -69,6 +84,30 @@ public class AuthService {
                             .build();
 
             studentRepository.save(student);
+        }
+
+        // FIX: Create Teacher entity when registering a TEACHER user
+        if (request.getRole().name()
+                .equals("TEACHER")) {
+
+            // Only create if not already existing for this user
+            if (teacherRepository.findByUserEmail(request.getEmail()).isEmpty()) {
+                Teacher teacher = new Teacher();
+                teacher.setFirstName(request.getName());
+                teacher.setLastName("");
+                teacher.setUser(savedUser);
+                // Generate a simple employee ID from email prefix
+                String empId = "EMP-" + request.getEmail()
+                        .split("@")[0]
+                        .replaceAll("[^a-zA-Z0-9]", "")
+                        .toUpperCase();
+                // Ensure uniqueness
+                if (teacherRepository.existsByEmployeeId(empId)) {
+                    empId = empId + "-" + System.currentTimeMillis() % 10000;
+                }
+                teacher.setEmployeeId(empId);
+                teacherRepository.save(teacher);
+            }
         }
 
         return "User Registered Successfully";

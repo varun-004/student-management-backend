@@ -27,6 +27,13 @@ public interface MarksRepository
     """)
     Double getAverageMarksByStudent(Long studentId);
 
+    @Query("""
+        SELECT m.student.id, AVG(m.score)
+        FROM Marks m
+        GROUP BY m.student.id
+    """)
+    List<Object[]> getAverageMarksAllStudents();
+
     // REQUIRED FOR MarksServiceImpl
     List<Marks> findByStudentId(Long studentId);
 

@@ -13,6 +13,10 @@ public interface MarksService {
             AddMarksRequest request
     );
 
+    List<MarksResponse> addMarksBulk(
+            List<AddMarksRequest> requests
+    );
+
     List<MarksResponse> getStudentMarks(
             Long studentId
     );

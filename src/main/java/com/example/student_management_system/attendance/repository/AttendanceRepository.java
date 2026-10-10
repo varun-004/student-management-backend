@@ -64,7 +64,24 @@ import java.util.Optional;
             Long studentId
     );
 
+    @Query("""
+        SELECT a.student.id,
+               AVG(
+                   CASE
+                       WHEN a.present = true THEN 100
+                       ELSE 0
+                   END
+               )
+        FROM Attendance a
+        GROUP BY a.student.id
+    """)
+    List<Object[]> getAverageAttendanceAllStudents();
+
     List<Attendance> findByCourseId(Long courseId);
+
+    List<Attendance> findByStudentId(Long studentId);
+
+    List<Attendance> findByStudentIdAndCourseId(Long studentId, Long courseId);
 
             void deleteByStudentIdAndCourseId(
                     Long studentId,
@@ -109,6 +126,24 @@ WHERE a.course.teacher.id = :teacherId
                     LocalDate attendanceDate
             );
 
+            /**
+             * Returns one row per course with aggregate totals computed at DB level.
+             * Each element is Object[]: [courseId(Long), courseName(String), total(Long), present(Long)]
+             */
+            @Query("""
+SELECT a.course.id,
+       a.course.courseName,
+       COUNT(a),
+       SUM(CASE WHEN a.present = true THEN 1 ELSE 0 END)
+FROM Attendance a
+WHERE a.student.id = :studentId
+GROUP BY a.course.id, a.course.courseName
+""")
+            List<Object[]> findCourseWiseAttendanceSummaryByStudent(
+                    @Param("studentId") Long studentId
+            );
+
 
 
 }
+

@@ -55,19 +55,22 @@ public class ReportServiceImpl
                                 studentId
                         );
 
-        if (averageMarks == null) {
+        if (averageMarks == null || marks.isEmpty()) {
             averageMarks = 0.0;
         }
 
-        Double attendancePercentage =
-                attendanceRepository
-                        .getAverageAttendanceByStudent(
-                                studentId
-                        );
+        Long totalAttendance =
+                attendanceRepository.getTotalAttendance(studentId);
 
-        if (attendancePercentage == null) {
-            attendancePercentage = 0.0;
+        Long presentAttendance =
+                attendanceRepository.getPresentAttendance(studentId);
+
+        double attendancePercentage = 0.0;
+        if (totalAttendance != null && totalAttendance > 0 && presentAttendance != null) {
+            attendancePercentage = (presentAttendance * 100.0) / totalAttendance;
         }
+
+        Double gpa = marks.isEmpty() ? 0.0 : calculateGpa(averageMarks);
 
         return StudentReportResponse
                 .builder()
@@ -88,10 +91,12 @@ public class ReportServiceImpl
                         attendancePercentage
                 )
 
+                .averageMarks(
+                        averageMarks
+                )
+
                 .gpa(
-                        calculateGpa(
-                                averageMarks
-                        )
+                        gpa
                 )
 
                 .marks(

@@ -114,6 +114,52 @@ public class MarksServiceImpl implements MarksService {
                 marks
         );
     }
+
+    @org.springframework.transaction.annotation.Transactional
+    @Override
+    public List<MarksResponse> addMarksBulk(List<AddMarksRequest> requests) {
+        if (requests == null || requests.isEmpty()) {
+            return List.of();
+        }
+
+        return requests.stream()
+                .filter(r -> r.getScore() != null)
+                .map(request -> {
+                    Student student = studentRepository.findById(request.getStudentId())
+                            .orElseThrow(() -> new RuntimeException("Student not found: " + request.getStudentId()));
+
+                    Course course = courseRepository.findById(request.getCourseId())
+                            .orElseThrow(() -> new RuntimeException("Course not found: " + request.getCourseId()));
+
+                    if (!student.getCourses().contains(course)) {
+                        throw new RuntimeException("Student is not enrolled in this course");
+                    }
+
+                    String grade = calculateGrade(request.getScore());
+
+                    Marks marks = marksRepository
+                            .findByStudent_IdAndCourse_IdAndSubject(
+                                    request.getStudentId(),
+                                    request.getCourseId(),
+                                    request.getSubject()
+                            )
+                            .orElse(
+                                    Marks.builder()
+                                            .student(student)
+                                            .course(course)
+                                            .subject(request.getSubject())
+                                            .build()
+                            );
+
+                    marks.setScore(request.getScore());
+                    marks.setGrade(grade);
+                    marksRepository.save(marks);
+
+                    return mapToResponse(marks);
+                })
+                .toList();
+    }
+
     @Override
     public List<MarksResponse> getStudentMarks(
             Long studentId
@@ -146,14 +192,42 @@ public class MarksServiceImpl implements MarksService {
             Long studentId
     ) {
 
-        double average = calculateStudentAverage(studentId);
+        List<Marks> marks =
+                marksRepository.findByStudentId(studentId);
 
-        if (average >= 90) return 4.0;
-        if (average >= 80) return 3.5;
-        if (average >= 70) return 3.0;
-        if (average >= 60) return 2.5;
+        if (marks.isEmpty()) {
+            return 0.0;
+        }
 
-        return 2.0;
+        double totalWeightedPoints = 0.0;
+        int totalCredits = 0;
+
+        for (Marks mark : marks) {
+            double score = mark.getScore() != null ? mark.getScore() : 0.0;
+            double gpaPoints = scoreToGpaPoints(score);
+
+            int credits = (mark.getCourse() != null && mark.getCourse().getCredits() != null && mark.getCourse().getCredits() > 0)
+                    ? mark.getCourse().getCredits()
+                    : 1;
+
+            totalWeightedPoints += gpaPoints * credits;
+            totalCredits += credits;
+        }
+
+        if (totalCredits == 0) {
+            return 0.0;
+        }
+
+        double gpa = totalWeightedPoints / totalCredits;
+        return Math.round(gpa * 100.0) / 100.0;
+    }
+
+    private double scoreToGpaPoints(double score) {
+        if (score >= 90) return 4.0;
+        if (score >= 80) return 3.5;
+        if (score >= 70) return 3.0;
+        if (score >= 60) return 2.0;
+        return 0.0; // Failing marks (< 60) receive 0.0 GPA
     }
 
     private String calculateGrade(Double score) {
