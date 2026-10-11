@@ -1,6 +1,3 @@
-git add src/main/java/com/example/student_management_system/analytics/service/AnalyticsServiceImpl.java
-git add src/main/java/com/example/student_management_system/attendance/repository/AttendanceRepository.java
-git add src/main/java/com/example/student_management_system/marks/repository/MarksRepository.javapackage com.example.student_management_system.report.dto;
 
 import com.example.student_management_system.marks.dto.MarksResponse;
 

@@ -152,4 +152,55 @@
 [32m+[m[32m    """)[m
 [32m+[m[32m    List<Object[]> getAverageAttendanceAllStudents();[m
 [32m+[m
-     List<Attendance> findByCourseId(L
+     List<Attendance> findByCourseId(Long courseId);[m
+ [m
+[32m+[m[32m    List<Attendance> findByStudentId(Long studentId);[m
+[32m+[m
+[32m+[m[32m    List<Attendance> findByStudentIdAndCourseId(Long studentId, Long courseId);[m
+[32m+[m
+             void deleteByStudentIdAndCourseId([m
+                     Long studentId,[m
+                     Long courseId[m
+[36m@@ -109,6 +126,24 @@[m [mWHERE a.course.teacher.id = :teacherId[m
+                     LocalDate attendanceDate[m
+             );[m
+ [m
+[32m+[m[32m            /**[m
+[32m+[m[32m             * Returns one row per course with aggregate totals computed at DB level.[m
+[32m+[m[32m             * Each element is Object[]: [courseId(Long), courseName(String), total(Long), present(Long)][m
+[32m+[m[32m             */[m
+[32m+[m[32m            @Query("""[m
+[32m+[m[32mSELECT a.course.id,[m
+[32m+[m[32m       a.course.courseName,[m
+[32m+[m[32m       COUNT(a),[m
+[32m+[m[32m       SUM(CASE WHEN a.present = true THEN 1 ELSE 0 END)[m
+[32m+[m[32mFROM Attendance a[m
+[32m+[m[32mWHERE a.student.id = :studentId[m
+[32m+[m[32mGROUP BY a.course.id, a.course.courseName[m
+[32m+[m[32m""")[m
+[32m+[m[32m            List<Object[]> findCourseWiseAttendanceSummaryByStudent([m
+[32m+[m[32m                    @Param("studentId") Long studentId[m
+[32m+[m[32m            );[m
+[32m+[m
+ [m
+ [m
+ }[m
+[41m+[m
+[1mdiff --git a/src/main/java/com/example/student_management_system/marks/repository/MarksRepository.java b/src/main/java/com/example/student_management_system/marks/repository/MarksRepository.java[m
+[1mindex 2d23e93..7345f69 100644[m
+[1m--- a/src/main/java/com/example/student_management_system/marks/repository/MarksRepository.java[m
+[1m+++ b/src/main/java/com/example/student_management_system/marks/repository/MarksRepository.java[m
+[36m@@ -27,6 +27,13 @@[m [mpublic interface MarksRepository[m
+     """)[m
+     Double getAverageMarksByStudent(Long studentId);[m
+ [m
+[32m+[m[32m    @Query("""[m
+[32m+[m[32m        SELECT m.student.id, AVG(m.score)[m
+[32m+[m[32m        FROM Marks m[m
+[32m+[m[32m        GROUP BY m.student.id[m
+[32m+[m[32m    """)[m
+[32m+[m[32m    List<Object[]> getAverageMarksAllStudents();[m
+[32m+[m
+     // REQUIRED FOR MarksServiceImpl[m
+     List<Marks> findByStudentId(Long studentId);[m
+ [m
