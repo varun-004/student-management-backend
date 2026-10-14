@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>student_management_system</artifactId>
+    <artifactId>campus_360_backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
